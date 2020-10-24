@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">MovCinema</string>
+    <string name="error_response_toast">Извините, произошла ошибка. Попробуйте позже.</string>
+    <string name="api_key">a6d0d0bd4c77f15cbb01c3b41edc0d2f</string>
+    <string name="now_going_label">В прокате</string>
+    <string name="popular_label">Популярные фильмы</string>
+    <string name="rating_movies_top_label">Топ по рейтингу</string>
+    <string name="settings_label">Настройки</string>
+    <string name="settings_labe">Настройки приложения...</string>
+</resources>

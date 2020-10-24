@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="spiral.bit.dev.movcinema">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/mov_cinema_ava"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/mov_cinema_ava"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MovCinema">
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/Theme.AppCompat"></activity>
+        <activity android:name=".activities.MovieDetailActivity" />
+        <activity android:name=".activities.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
