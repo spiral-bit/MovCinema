@@ -17,10 +17,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.internal.EverythingIsNonNull;
 import spiral.bit.dev.movcinema.R;
 import spiral.bit.dev.movcinema.adapters.PopularAdapter;
 import spiral.bit.dev.movcinema.adapters.TopAdapter;
@@ -45,10 +47,11 @@ public class TopRatingFragment extends Fragment {
         requestTopRatingMovies();
         swipe = view.findViewById(R.id.swipe_layout);
         swipe.setColorSchemeColors(Color.GREEN);
-        swipe.setOnRefreshListener(() -> requestTopRatingMovies());
+        swipe.setOnRefreshListener(this::requestTopRatingMovies);
         return view;
     }
 
+    @EverythingIsNonNull
     private void requestTopRatingMovies() {
         MovieService service = RetroInst.getService();
         Call<Top> topCall = service.getAllTopRatingMovies(getString(R.string.api_key));
@@ -60,18 +63,18 @@ public class TopRatingFragment extends Fragment {
                     topArrayList = (ArrayList<TopResult>) top.getResults();
                     initRecycler();
                     swipe.setRefreshing(false);
-                }
+                } else Toast.makeText(getContext(), getString(R.string.error_response_toast), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Call<Top> call, Throwable t) {
-                Toast.makeText(getContext(), getString(R.string.error_response_toast) + t, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.error_response_toast), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void initRecycler() {
-        recycler = getView().findViewById(R.id.top_recycler);
+        recycler = Objects.requireNonNull(getView()).findViewById(R.id.top_recycler);
         recycler.setItemAnimator(new DefaultItemAnimator());
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             recycler.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));

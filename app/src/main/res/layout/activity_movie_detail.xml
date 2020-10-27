@@ -7,9 +7,6 @@
     tools:context=".activities.MovieDetailActivity">
 
     <com.makeramen.roundedimageview.RoundedImageView
-        app:riv_border_width="3dp"
-        app:riv_border_color="@color/white"
-        app:riv_corner_radius="3dp"
         android:id="@+id/image_of_curr_movie"
         android:layout_width="match_parent"
         android:layout_height="350dp"
@@ -23,50 +20,51 @@
         android:src="@drawable/placeholder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:riv_border_color="@color/white"
+        app:riv_border_width="3dp"
+        app:riv_corner_radius="3dp" />
 
-    <LinearLayout
-        android:layout_width="378dp"
-        android:layout_height="363dp"
-        android:orientation="vertical"
+    <TextView
+        android:id="@+id/title_curr_movie_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/rmono_bold"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image_of_curr_movie">
+        app:layout_constraintTop_toBottomOf="@id/image_of_curr_movie" />
 
+    <TextView
+        android:id="@+id/vote_curr_movie_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="6dp"
+        android:fontFamily="@font/rmono_regular"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_curr_movie_tv" />
 
-        <TextView
-            android:id="@+id/title_curr_movie_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/rmono_bold"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/vote_curr_movie_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="6dp"
-            android:fontFamily="@font/rmono_regular"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/overview_curr_movie_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:fontFamily="@font/rmono_regular"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/overview_curr_movie_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/rmono_regular"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vote_curr_movie_tv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

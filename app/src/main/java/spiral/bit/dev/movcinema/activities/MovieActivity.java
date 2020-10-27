@@ -4,24 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import android.app.ActionBar;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.google.android.material.tabs.TabLayout;
 
 import spiral.bit.dev.movcinema.R;
 import spiral.bit.dev.movcinema.adapters.TabAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MovieActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -40,10 +34,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.settings_icon:
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-                return true;
+        if (item.getItemId() == R.id.settings_icon) {
+            startActivity(new Intent(MovieActivity.this, SettingsActivity.class));
+            return true;
         }
         return true;
     }

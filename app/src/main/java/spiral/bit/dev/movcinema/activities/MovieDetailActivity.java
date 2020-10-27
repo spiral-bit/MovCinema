@@ -2,20 +2,18 @@ package spiral.bit.dev.movcinema.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.makeramen.roundedimageview.RoundedImageView;
-import com.squareup.picasso.Picasso;
+
+import java.util.Objects;
 
 import spiral.bit.dev.movcinema.R;
-import spiral.bit.dev.movcinema.models.NowPlaying;
 import spiral.bit.dev.movcinema.models.NowPlayingResult;
-import spiral.bit.dev.movcinema.models.Popular;
 import spiral.bit.dev.movcinema.models.PopularResult;
-import spiral.bit.dev.movcinema.models.Top;
 import spiral.bit.dev.movcinema.models.TopResult;
 
 public class MovieDetailActivity extends AppCompatActivity {
@@ -35,27 +33,33 @@ public class MovieDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         urlPath = "https://image.tmdb.org/t/p/w500/";
         if (intent != null && intent.hasExtra("movObject") && intent.hasExtra("typeMovie")) {
-            if (intent.getStringExtra("typeMovie").equals("popular")) {
-                PopularResult popularResult = intent.getParcelableExtra("movObject");
-                urlPath += popularResult.getPosterPath();
-                Picasso.get().load(urlPath).placeholder(R.drawable.placeholder).into(currImageView);
-                titleTv.setText(popularResult.getOriginalTitle());
-                voteTv.setText(String.valueOf(popularResult.getVoteCount()));
-                overviewTv.setText(popularResult.getOverview());
-            } else if (intent.getStringExtra("typeMovie").equals("topRating")) {
-                TopResult topResult = intent.getParcelableExtra("movObject");
-                urlPath += topResult.getPosterPath();
-                Picasso.get().load(urlPath).placeholder(R.drawable.placeholder).into(currImageView);
-                titleTv.setText(topResult.getOriginalTitle());
-                voteTv.setText(String.valueOf(topResult.getVoteCount()));
-                overviewTv.setText(topResult.getOverview());
-            } else if (intent.getStringExtra("typeMovie").equals("nowPlaying")) {
-                NowPlayingResult nowPlaying = intent.getParcelableExtra("nowPlaying");
-                urlPath += nowPlaying.getPosterPath();
-                Picasso.get().load(urlPath).placeholder(R.drawable.placeholder).into(currImageView);
-                titleTv.setText(nowPlaying.getOriginalTitle());
-                voteTv.setText(String.valueOf(nowPlaying.getVoteCount()));
-                overviewTv.setText(nowPlaying.getOverview());
+            String typeOfMovie = intent.getStringExtra("typeMovie");
+            if (typeOfMovie != null) {
+                switch (typeOfMovie) {
+                    case "popular":
+                        PopularResult popularResult = intent.getParcelableExtra("movObject");
+                        urlPath += Objects.requireNonNull(popularResult).getPosterPath();
+                        Glide.with(currImageView).load(urlPath).placeholder(R.drawable.placeholder).into(currImageView);
+                        titleTv.setText(popularResult.getOriginalTitle());
+                        voteTv.setText(String.valueOf(popularResult.getVoteCount()));
+                        overviewTv.setText(popularResult.getOverview());
+                        return;
+                    case "topRating":
+                        TopResult topResult = intent.getParcelableExtra("movObject");
+                        urlPath += Objects.requireNonNull(topResult).getPosterPath();
+                        Glide.with(currImageView).load(urlPath).placeholder(R.drawable.placeholder).into(currImageView);
+                        titleTv.setText(topResult.getOriginalTitle());
+                        voteTv.setText(String.valueOf(topResult.getVoteCount()));
+                        overviewTv.setText(topResult.getOverview());
+                        return;
+                    case "nowPlaying":
+                        NowPlayingResult nowPlaying = intent.getParcelableExtra("movObject");
+                        urlPath += Objects.requireNonNull(nowPlaying).getPosterPath();
+                        Glide.with(currImageView).load(urlPath).placeholder(R.drawable.placeholder).into(currImageView);
+                        titleTv.setText(nowPlaying.getOriginalTitle());
+                        voteTv.setText(String.valueOf(nowPlaying.getVoteCount()));
+                        overviewTv.setText(nowPlaying.getOverview());
+                }
             }
         } else onBackPressed();
     }

@@ -19,10 +19,12 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.internal.EverythingIsNonNull;
 import spiral.bit.dev.movcinema.R;
 import spiral.bit.dev.movcinema.adapters.PopularAdapter;
 import spiral.bit.dev.movcinema.models.Popular;
@@ -45,7 +47,7 @@ public class PopularFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_popular, container, false);
         requestPopularMovies();
-        prefAnim = getContext().getSharedPreferences("anim_pref", 0);
+        prefAnim = Objects.requireNonNull(getContext()).getSharedPreferences("anim_pref", 0);
         editorAnim = prefAnim.edit();
         if (!prefAnim.getBoolean("isAnimated", false)) {
             animRecycler = AnimationUtils.loadAnimation(getContext(), R.anim.anim_recycler);
@@ -57,10 +59,11 @@ public class PopularFragment extends Fragment {
         }
         swipe = view.findViewById(R.id.swipe_layout);
         swipe.setColorSchemeColors(Color.GREEN);
-        swipe.setOnRefreshListener(() -> requestPopularMovies());
+        swipe.setOnRefreshListener(this::requestPopularMovies);
         return view;
     }
 
+    @EverythingIsNonNull
     private void requestPopularMovies() {
         MovieService service = RetroInst.getService();
         Call<Popular> popularCall = service.getAllPopularMovies(getString(R.string.api_key));
@@ -77,18 +80,18 @@ public class PopularFragment extends Fragment {
                         editorAnim.putBoolean("isAnimated", true);
                         editorAnim.apply();
                     }
-                }
+                } else Toast.makeText(getContext(), getString(R.string.error_response_toast), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Call<Popular> call, Throwable t) {
-                Toast.makeText(getContext(), getString(R.string.error_response_toast) + t, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.error_response_toast), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void initRecycler() {
-        recycler = getView().findViewById(R.id.popular_recycler);
+        recycler = Objects.requireNonNull(getView()).findViewById(R.id.popular_recycler);
         recycler.setItemAnimator(new DefaultItemAnimator());
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             recycler.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
