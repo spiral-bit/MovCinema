@@ -19,7 +19,6 @@ public class MovieActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
-    private TabAdapter tabAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +26,7 @@ public class MovieActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         tabLayout = findViewById(R.id.main_tab);
         tabLayout.post(() -> tabLayout.setupWithViewPager(viewPager));
-        tabAdapter = new TabAdapter(getSupportFragmentManager());
+        TabAdapter tabAdapter = new TabAdapter(getSupportFragmentManager());
         viewPager = findViewById(R.id.main_tabs_pager);
         viewPager.setAdapter(tabAdapter);
     }

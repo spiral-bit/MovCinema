@@ -18,8 +18,8 @@ import spiral.bit.dev.movcinema.models.PopularResult;
 
 public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.PopularResultViewHolder> {
 
-    private Context context;
-    private ArrayList<PopularResult> results;
+    private final Context context;
+    private final ArrayList<PopularResult> results;
 
     public PopularAdapter(Context context, ArrayList<PopularResult> results) {
         this.context = context;
@@ -55,7 +55,7 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.PopularR
         return results.size();
     }
 
-    class PopularResultViewHolder extends RecyclerView.ViewHolder {
+    static class PopularResultViewHolder extends RecyclerView.ViewHolder {
 
         RoundedImageView imgPreview;
         TextView tvName, tvPopular;

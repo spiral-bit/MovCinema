@@ -21,13 +21,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.internal.EverythingIsNonNull;
 import spiral.bit.dev.movcinema.R;
 import spiral.bit.dev.movcinema.adapters.PopularAdapter;
-import spiral.bit.dev.movcinema.models.Popular;
 import spiral.bit.dev.movcinema.models.PopularResult;
 import spiral.bit.dev.movcinema.services.MovieService;
 import spiral.bit.dev.movcinema.services.RetroInst;
@@ -36,22 +35,23 @@ public class PopularFragment extends Fragment {
 
     private ArrayList<PopularResult> popularArrayList;
     private RecyclerView recycler;
-    private PopularAdapter adapter;
     private SwipeRefreshLayout swipe;
-    private Animation animRecycler, animLabel;
+    private Animation animRecycler;
     private SharedPreferences prefAnim;
     private SharedPreferences.Editor editorAnim;
+    private CompositeDisposable compositeDisposable;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_popular, container, false);
+        compositeDisposable = new CompositeDisposable();
         requestPopularMovies();
         prefAnim = Objects.requireNonNull(getContext()).getSharedPreferences("anim_pref", 0);
         editorAnim = prefAnim.edit();
         if (!prefAnim.getBoolean("isAnimated", false)) {
             animRecycler = AnimationUtils.loadAnimation(getContext(), R.anim.anim_recycler);
-            animLabel = AnimationUtils.loadAnimation(getContext(), R.anim.anim_label);
+            Animation animLabel = AnimationUtils.loadAnimation(getContext(), R.anim.anim_label);
             TextView label = view.findViewById(R.id.label_tv);
             label.startAnimation(animLabel);
             editorAnim.putBoolean("isAnimated", true);
@@ -66,28 +66,22 @@ public class PopularFragment extends Fragment {
     @EverythingIsNonNull
     private void requestPopularMovies() {
         MovieService service = RetroInst.getService();
-        Call<Popular> popularCall = service.getAllPopularMovies(getString(R.string.api_key));
-        popularCall.enqueue(new Callback<Popular>() {
-            @Override
-            public void onResponse(Call<Popular> call, Response<Popular> response) {
-                Popular popular = response.body();
-                if (popular != null && popular.getResults() != null) {
-                    popularArrayList = (ArrayList<PopularResult>) popular.getResults();
-                    initRecycler();
-                    swipe.setRefreshing(false);
-                    if (!prefAnim.getBoolean("isAnimated", false)) {
-                        recycler.startAnimation(animRecycler);
-                        editorAnim.putBoolean("isAnimated", true);
-                        editorAnim.apply();
-                    }
-                } else Toast.makeText(getContext(), getString(R.string.error_response_toast), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call<Popular> call, Throwable t) {
-                Toast.makeText(getContext(), getString(R.string.error_response_toast), Toast.LENGTH_SHORT).show();
-            }
-        });
+        compositeDisposable.add(service.getAllPopularMovies(getString(R.string.api_key))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(popular -> {
+                    if (popular != null && popular.getResults() != null) {
+                        popularArrayList = (ArrayList<PopularResult>) popular.getResults();
+                        initRecycler();
+                        swipe.setRefreshing(false);
+                        if (!prefAnim.getBoolean("isAnimated", false)) {
+                            recycler.startAnimation(animRecycler);
+                            editorAnim.putBoolean("isAnimated", true);
+                            editorAnim.apply();
+                        }
+                    } else
+                        Toast.makeText(getContext(), getString(R.string.error_response_toast), Toast.LENGTH_SHORT).show();
+                }));
     }
 
     private void initRecycler() {
@@ -97,7 +91,7 @@ public class PopularFragment extends Fragment {
             recycler.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         } else
             recycler.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
-        adapter = new PopularAdapter(getContext(), popularArrayList);
+        PopularAdapter adapter = new PopularAdapter(getContext(), popularArrayList);
         recycler.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

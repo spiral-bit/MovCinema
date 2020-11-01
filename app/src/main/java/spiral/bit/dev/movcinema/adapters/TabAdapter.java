@@ -1,9 +1,11 @@
 package spiral.bit.dev.movcinema.adapters;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+
 import spiral.bit.dev.movcinema.fragments.NowPlayingFragment;
 import spiral.bit.dev.movcinema.fragments.PopularFragment;
 import spiral.bit.dev.movcinema.fragments.TopRatingFragment;
@@ -14,6 +16,7 @@ public class TabAdapter extends FragmentPagerAdapter {
         super(fm);
     }
 
+    @NonNull
     @Override
     public Fragment getItem(int i) {
         switch (i) {
@@ -24,7 +27,7 @@ public class TabAdapter extends FragmentPagerAdapter {
             case 2:
                 return new NowPlayingFragment();
             default:
-                return null;
+                return new PopularFragment();
         }
     }
 
@@ -44,7 +47,7 @@ public class TabAdapter extends FragmentPagerAdapter {
             case 2:
                 return "Недавние";
             default:
-                return null;
+                return "Популярные";
         }
     }
 }

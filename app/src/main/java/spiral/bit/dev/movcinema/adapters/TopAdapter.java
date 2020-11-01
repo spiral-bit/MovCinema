@@ -6,22 +6,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.makeramen.roundedimageview.RoundedImageView;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
 import spiral.bit.dev.movcinema.R;
-import spiral.bit.dev.movcinema.models.TopResult;
 import spiral.bit.dev.movcinema.activities.MovieDetailActivity;
+import spiral.bit.dev.movcinema.models.TopResult;
 
 public class TopAdapter extends RecyclerView.Adapter<TopAdapter.TopResultViewHolder> {
 
-    private Context context;
-    private ArrayList<TopResult> topArrayList;
+    private final Context context;
+    private final ArrayList<TopResult> topArrayList;
 
     public TopAdapter(Context context, ArrayList<TopResult> topArrayList) {
         this.context = context;
@@ -39,7 +41,7 @@ public class TopAdapter extends RecyclerView.Adapter<TopAdapter.TopResultViewHol
     public void onBindViewHolder(@NonNull TopResultViewHolder holder, int position) {
         holder.tvName.setText(topArrayList.get(position).getOriginalTitle());
         String popularity = String.format(Locale.getDefault(), "%1$,.2f ",
-                        topArrayList.get(position).getPopularity());
+                topArrayList.get(position).getPopularity());
         holder.tvPopular.setText(popularity);
         String urlPath = "https://image.tmdb.org/t/p/w500/" + topArrayList.get(position).getPosterPath();
         Glide.with(context).load(urlPath).placeholder(R.drawable.placeholder).into(holder.imgPreview);
@@ -57,7 +59,7 @@ public class TopAdapter extends RecyclerView.Adapter<TopAdapter.TopResultViewHol
         return topArrayList.size();
     }
 
-    class TopResultViewHolder extends RecyclerView.ViewHolder {
+    static class TopResultViewHolder extends RecyclerView.ViewHolder {
 
         RoundedImageView imgPreview;
         TextView tvName, tvPopular;

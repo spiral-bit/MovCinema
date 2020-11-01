@@ -20,8 +20,8 @@ import spiral.bit.dev.movcinema.activities.MovieDetailActivity;
 
 public class NowPlayingAdapter extends RecyclerView.Adapter<NowPlayingAdapter.NowPlayingViewHolder> {
 
-    private Context context;
-    private ArrayList<NowPlayingResult> nowPlayingArrayList;
+    private final Context context;
+    private final ArrayList<NowPlayingResult> nowPlayingArrayList;
 
     public NowPlayingAdapter(Context context, ArrayList<NowPlayingResult> nowPlayingArrayList) {
         this.context = context;
@@ -57,7 +57,7 @@ public class NowPlayingAdapter extends RecyclerView.Adapter<NowPlayingAdapter.No
         return nowPlayingArrayList.size();
     }
 
-    class NowPlayingViewHolder extends RecyclerView.ViewHolder {
+    static class NowPlayingViewHolder extends RecyclerView.ViewHolder {
 
         RoundedImageView imgPreview;
         TextView tvName, tvPopular;
